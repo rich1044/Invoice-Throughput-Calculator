@@ -1,0 +1,143 @@
+<html>
+	<head>
+		<title>Invoice Throughput</title>
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+		<script>
+			///////////////////////////////////////////////////////////////////
+			// DATEADD function
+			///////////////////////////////////////////////////////////////////
+			function addDays(daysToAdd){
+				// Get today's date
+				var today = new Date(),
+					calculatedDate = new Date();
+
+				// Exclude weekends
+				var modifiedDaysToAdd = daysToAdd;
+
+				for(i = 1; i <= modifiedDaysToAdd; i++) {
+					var iToday = new Date();
+					iToday.setDate(today.getDate() + i);
+					
+					if(iToday.getDay() == 0 || iToday.getDay() == 6) {
+						modifiedDaysToAdd++;
+					}
+				};
+				
+				// Get different components of the new calculated date, add 1 to the month as it starts at 0			
+				calculatedDate.setDate(today.getDate() + modifiedDaysToAdd);
+				var	yr = calculatedDate.getFullYear(),
+					month = calculatedDate.getMonth()+1,
+					day = calculatedDate.getDate();
+				
+				// Format month to add 0 if < 10
+				if(month < 10){ 
+					month = "0" + month;
+				}
+				
+				// Format day to add 0 if < 10
+				if(day < 10){ 
+					day = "0" + day;
+				}
+				
+				return yr+"-"+month+"-"+day;
+			};
+			
+			///////////////////////////////////////////////////////////////////
+			// DATEDIFF Function
+			///////////////////////////////////////////////////////////////////
+			function showDays(firstDate,secondDate){
+				var startDay = new Date(firstDate);
+				var endDay = new Date(secondDate);
+				var millisecondsPerDay = 1000 * 60 * 60 * 24;
+				
+				var millisBetween = startDay.getTime() - endDay.getTime();
+				var days = millisBetween / millisecondsPerDay;
+				
+				return Math.ceil(days);
+			}	
+			
+			///////////////////////////////////////////////////////////////////
+			// Main function
+			///////////////////////////////////////////////////////////////////
+			function calculate(){
+				// Declaring Variables
+				var numberInvoices = $("#numberInvoices").val();
+				var timeToInvoice = $("#timeToInvoice").val();
+				var hours = $("#hours:checked").val();
+				var days = $("#days:checked").val();
+				var estimatedEndDate = $("#estimatedEndDate").val();
+				
+				// If we use hours, then convert to days
+				if(hours == "on"){
+					timeToInvoice = timeToInvoice/8.00;
+				}
+				
+				// if no estimated date given, calculate
+				if(estimatedEndDate == "" && numberInvoices != "" && timeToInvoice !=""){
+					// Setting number of days to add
+					var daysToAdd = numberInvoices * timeToInvoice;
+					
+					// Set estimated end date
+					$("#estimatedEndDate").val(addDays(daysToAdd));
+					
+				} else if (estimatedEndDate != "" && numberInvoices == "" && timeToInvoice !="") {
+					// Datediff the estimated end date and todays date
+					var start = new Date(),
+						dayDiff = showDays(estimatedEndDate, start);
+					
+					// Get today's date
+					var today = new Date(),
+						calculatedDate = new Date();
+
+					// Exclude weekends
+					var modifiedDaysToAdd = dayDiff;
+
+					for(i = 1; i <= modifiedDaysToAdd; i++) {
+						var iToday = new Date();
+						iToday.setDate(today.getDate() + i);
+
+						if(iToday.getDay() == 0 || iToday.getDay() == 6) {
+							modifiedDaysToAdd--;
+						}
+					}
+					
+					// Set number of invoices we can process per day
+					$("#numberInvoices").val(modifiedDaysToAdd/timeToInvoice);
+					
+				} else if (estimatedEndDate != "" && numberInvoices != "" && timeToInvoice =="") {
+					console.log("");
+				}
+			};
+			
+			function reset(){
+				$("#numberInvoices").val(7);
+				$("#timeToInvoice").val(1);
+				$("#estimatedEndDate").val("");
+			}
+		</script>
+	</head>
+	<body>
+		<p>Number of Inoices to Process</p>
+		<input id="numberInvoices" value="7"/>
+		
+		<p>Time to Invoice</p>
+		<input id="timeToInvoice" value="1"/>
+		
+		<input type="radio"  id="hours" name="time"/>
+		<label for="hours">hours</label>
+		
+		<input type="radio" checked="checked" id="days" name="time"/>
+		<label for="days">days</label>
+		
+		<p>Estimated End Date</p>
+		<input type="date" id="estimatedEndDate" />
+		<br>
+		<br>
+		
+		<button id="Submit" onclick="calculate()">Submit</button>
+		<button id="Reset" onclick="reset()">Reset</button>
+		<br>
+		<br>
+		<i><p>**Excludes weekends, assumes 8 hour work days when choosing hours.**</p></i>
+	</body>
+</html>
