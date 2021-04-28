@@ -106,6 +106,18 @@
 					
 				} else if (estimatedEndDate != "" && numberInvoices != "" && timeToInvoice =="") {
 					console.log("");
+				} 
+				//Error checking
+				else if (estimatedEndDate == "" && numberInvoices == "" && timeToInvoice ==""){
+					alert("Please enter a value for two of the fields.");
+				} else if (estimatedEndDate == "" && numberInvoices == "" && timeToInvoice !="") {
+					alert("Please enter a value for two of the fields.");
+				} else if (estimatedEndDate == "" && numberInvoices != "" && timeToInvoice =="") {
+					alert("Please enter a value for two of the fields.");
+				} else if (estimatedEndDate != "" && numberInvoices == "" && timeToInvoice =="") {
+					alert("Please enter a value for two of the fields.");
+				} else if(estimatedEndDate != "" && numberInvoices != "" && timeToInvoice !="") {
+					alert("All fields have values");
 				}
 			};
 			
@@ -118,10 +130,10 @@
 	</head>
 	<body>
 		<p>Number of Inoices to Process</p>
-		<input id="numberInvoices" value="7"/>
+		<input type="number" id="numberInvoices" value="7"/>
 		
 		<p>Time to Invoice</p>
-		<input id="timeToInvoice" value="1"/>
+		<input type="number" id="timeToInvoice" value="1"/>
 		
 		<input type="radio"  id="hours" name="time"/>
 		<label for="hours">hours</label>
