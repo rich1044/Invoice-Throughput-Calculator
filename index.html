@@ -141,18 +141,18 @@
 			};
 			
 			function reset(){
-				$("#numberInvoices").val(7);
-				$("#timeToInvoice").val(1);
+				$("#numberInvoices").val("");
+				$("#timeToInvoice").val("");
 				$("#estimatedEndDate").val("");
 			}
 		</script>
 	</head>
 	<body>
 		<p>Number of Invoices to Process</p>
-		<input type="number" id="numberInvoices" value="7"/>
+		<input type="number" id="numberInvoices" />
 		
 		<p>Time to Invoice</p>
-		<input type="number" id="timeToInvoice" value="1"/>
+		<input type="number" id="timeToInvoice" />
 		
 		<input type="radio"  id="hours" name="time"/>
 		<label for="hours">hours</label>
