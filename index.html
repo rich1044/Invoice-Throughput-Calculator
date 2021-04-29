@@ -86,8 +86,7 @@
 						dayDiff = showDays(estimatedEndDate, start);
 					
 					// Get today's date
-					var today = new Date(),
-						calculatedDate = new Date();
+					var today = new Date();
 
 					// Exclude weekends
 					var modifiedDaysToAdd = dayDiff;
@@ -105,9 +104,29 @@
 					$("#numberInvoices").val(modifiedDaysToAdd/timeToInvoice);
 					
 				} else if (estimatedEndDate != "" && numberInvoices != "" && timeToInvoice =="") {
-					console.log("");
+					// Get the amount of time between today's date and the estimated end date
+					var today = new Date();
+					var dayDiff = showDays(estimatedEndDate,today);
+					
+					// Exclude weekends
+					var modifiedDaysToAdd = dayDiff;
+
+					for(i = 1; i <= dayDiff; i++) {
+						var iToday = new Date();
+						iToday.setDate(today.getDate() + i);
+						
+						if(iToday.getDay() == 0 || iToday.getDay() == 6) {
+							modifiedDaysToAdd--;
+						}
+					}
+					
+					if(hours == "on"){
+						$("#timeToInvoice").val((numberInvoices/modifiedDaysToAdd)*8);
+					} else {
+						$("#timeToInvoice").val(numberInvoices/modifiedDaysToAdd);
+					}
 				} 
-				//Error checking
+				// Error checking
 				else if (estimatedEndDate == "" && numberInvoices == "" && timeToInvoice ==""){
 					alert("Please enter a value for two of the fields.");
 				} else if (estimatedEndDate == "" && numberInvoices == "" && timeToInvoice !="") {
