@@ -121,9 +121,9 @@
 					}
 					
 					if(hours == "on"){
-						$("#timeToInvoice").val((numberInvoices/modifiedDaysToAdd)*8);
+						$("#timeToInvoice").val((modifiedDaysToAdd/numberInvoices)*8);
 					} else {
-						$("#timeToInvoice").val(numberInvoices/modifiedDaysToAdd);
+						$("#timeToInvoice").val(modifiedDaysToAdd/numberInvoices);
 					}
 				} 
 				// Error checking
